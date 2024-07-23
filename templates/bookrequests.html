@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Librarian's dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+  </head>
+  <body>
+    <div class="container">
+      <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark border-bottom">
+        <a class="navbar-brand" href="#" style="margin: 10px;"><h2>Librarian's Dashboard</h2></a>
+        </button>
+        <ul class="navbar-nav ms-auto order-5" style="margin-right: 25px;">
+          <li class="nav-item">
+            <a class="nav-link" href="{{url_for('libdash',user_id=user_id)}}"
+              >Home</a
+            >
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="viewbookslib.html">Books</a>
+          </li>
+          <li class="nav-item">
+            <form action="/logout" method="post">
+              <button class="nav-link" type="submit" style="margin-right: 25px">Logout</button>
+            </form>
+          </li>
+        </ul>
+      </nav>
+      <span><h4 style="margin-top : 150px; color: black;"></h4>
+        <a class= "btn btn-lg btn-secondary" href="{{url_for('newsection')}}">Make a new Section +</a></span><br><br>
+      <h3>Manage Requests:</h3><br><br>
+      <ul class="row">
+        {%for r in range(pendingrequests|length)%}
+        <li class="col-4" type="none" style="margin-bottom:10px;">
+          <div class="card">
+            <div class="card-body">
+              <div class="card-title"><h3>{{pendingrequests[r][2]}}</h3>
+                <p class="secondary-text">by {{pendingrequests[r][3]}}</p>
+              </div>
+              <div class="card-text">Request Id: {{pendingrequests[r][0]}}<br>Requested by: {{pendingrequests[r][1]}} <br> On {{pendingrequests[r][4][0:16]}}</div>
+              <ul class="list-inline">
+                <li class="list-inline-item">
+                  <form action="/grant/{{pendingrequests[r][0]}}" method="post">
+                    <button name="grant" type="submit" class="btn btn-success">Grant</button>
+                  </form>
+                </li>
+                <li class="list-inline-item">
+                  <form action="/reject/{{pendingrequests[r][0]}}" method="post">
+                    <button name="reject" type="submit" class="btn btn-danger">Reject</button>
+                  </form>         
+                </li>  
+              </ul>
+            </div>
+          </div>
+          {%endfor%}
+        </li>
+      </ul>
+      <br><hr><br>
+      <h3>Issued Books:</h3><br><br>
+      <ul class="row">
+        {%for r in range(issuedrequests|length)%}
+        <li class="col-4" type="none" style="margin-bottom:10px;">
+          <div class="card text-center">
+            <div class="card-body">
+              <div class="card-title"><h3>{{issuedrequests[r][2]}}</h3>
+                <p class="secondary-text">by {{issuedrequests[r][3]}}</p>
+              </div>
+              <div class="card-text">Request Id: {{issuedrequests[r][0]}}<br>Requested by: {{issuedrequests[r][1]}} <br> On {{issuedrequests[r][4][0:16]}}</div>
+              <form action="/revoke/{{issuedrequests[r][0]}}" method="post">
+                <button name="revoke" type="submit" class="btn btn-danger">Revoke</button>         
+              </form>
+            </div>
+          </div>
+          {%endfor%}
+        </li>
+      </ul>
+      <br><hr><br>
+      <h3>Returned Books:</h3><br><br>
+      <ul class="row">
+        {%for r in range(returned_requests|length)%}
+        <li class="col-4" type="none" style="margin-bottom:10px;">
+          <div class="card text-center">
+            <div class="card-body">
+              <div class="card-title"><h3>{{returned_requests[r][1]}}</h3>
+                <p class="secondary-text">by {{returned_requests[r][2]}}</p>
+              </div>
+              <div class="card-text">Request Id: {{returned_requests[r][7]}}<br>Requested by: {{returned_requests[r][5]}} <br> On {{returned_requests[r][3][0:16]}}</div>
+            </div>
+          </div>
+          {%endfor%}
+        </li>
+      </ul>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+  </body>
+</html>

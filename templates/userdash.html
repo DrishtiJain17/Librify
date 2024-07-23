@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{{name}}'s dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+  </head>
+  <body>
+    <div class="container">
+      <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark border-bottom">
+        <a class="navbar-brand" href="#" style="margin: 10px;"><h2>{{name}}'s Dashboard</h2></a>
+        </button>
+        <ul class="navbar-nav ms-auto order-5" style="margin-right: 25px;">
+          <li class="nav-item">
+            <a class="nav-link" href="{{url_for('user_books',user_id=user_id)}}"
+              >Home</a
+            >
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#mybooks">My Books</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#bookrequests">My Book Requests</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{{url_for('browsebooks')}}">Browse Books</a>
+          </li>
+          <li class="nav-item">
+            <form action="/logout" method="post">
+              <button class="nav-link" type="submit" style="margin-right: 25px">Logout</button>
+            </form>
+          </li>
+        </ul>
+      </nav>
+      <div class="container" style="margin-top:120px">
+        <h2 id="mybooks">My Current Books</h2><br><br>
+        {%for b in range(userbooksinfo | length)%}
+        <div class="card">
+          <div class="card-body">
+            <h6 class="card-text">
+              <h5>
+                {{userbooksinfo[b][1]}} | By {{userbooksinfo[b][2]}} <br>
+              </h5>
+              Return by : {{userbooksinfo[b][4][0:16]}} <br>
+              Requested on : {{userbooksinfo[b][3][0:16]}} <br>
+              Book ID : {{userbooksinfo[b][0]}} <br><br>
+              <ul class="list-inline" type="none">
+                <li class="list-inline-item">
+                  <a
+                  class="btn btn-secondary"
+                  href="{{ url_for('read_book', book_id=userbooksinfo[b][0]) }}"
+                  style="justify-self: end"
+                  >View Book</a
+                  >
+                </li>
+                <li class="list-inline-item">
+                  <a
+                  class="btn btn-primary"
+                  href="{{ url_for('markascompleted', request_id=userbooksinfo[b][6]) }}"
+                  style="justify-self: end"
+                  >Mark as Completed</a
+                  >
+                </li>
+                <li class="list-inline-item">
+                  <a
+                  class="btn btn-success"
+                  href="{{ url_for('returnbook', request_id=userbooksinfo[b][6]) }}"
+                  style="justify-self: end"
+                  >Return Book</a
+                  >
+                </li>
+                <li class="list-inline-item">
+                  <a
+                  class="btn btn-dark"
+                  href="{{ url_for('feedback', user_id=userbooksinfo[b][7],book_id=userbooksinfo[b][0]) }}"
+                  style="justify-self: end"
+                  >Give feedback</a
+                  >
+                </li>
+              </ul>
+            </h6>
+          </div>
+        </div>
+        <br />
+        {%endfor%}
+        <br><hr><br>
+        <h2 id="bookrequests">My Book Requests</h2><br><br>
+        {%for b in range(requested_booksinfo | length)%}
+        <div class="card">
+          <div class="card-body">
+            <h6 class="card-text">
+              <h5>
+                {{requested_booksinfo[b][1]}} | By {{requested_booksinfo[b][2]}} <br>
+              </h5>
+              Status : {{requested_booksinfo[b][6]}} <br>
+              Requested on : {{requested_booksinfo[b][3][0:16]}} <br>
+              Book ID : {{requested_booksinfo[b][0]}} <br><br>
+              <a
+                class="btn btn-secondary"
+                href="{{ url_for('withdraw_request', request_id=requested_booksinfo[b][7]) }}"
+                style="justify-self: end"
+                >Withdraw Request</a
+              >
+            </h6>
+          </div>
+        </div>
+        <br />
+        {%endfor%}
+        <br><hr><br>
+        <h2 id="bookrequests">Other Book Requests</h2><br><br>
+        {%for b in range(other_requests | length)%}
+        <div class="card">
+          <div class="card-body">
+            <h6 class="card-text">
+              <h5>
+                {{other_requests[b][1]}} | By {{other_requests[b][2]}} <br>
+              </h5>
+              Status : {{other_requests[b][6]}} <br>
+              Requested on : {{other_requests[b][3][0:16]}} <br>
+              Requested by : {{other_requests[b][5]}}
+              Book ID : {{other_requests[b][0]}} <br>
+            </h6>
+          </div>
+        </div>
+        <br />
+        {%endfor%}
+      </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+  </body>
+</html>
